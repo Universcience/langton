@@ -3,7 +3,7 @@ LDFLAGS=-lncurses
 
 BIN=langton
 
-turing: main.c langton.c
+langton: main.c langton.c
 
 .PHONY: all clean
 

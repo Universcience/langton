@@ -45,14 +45,15 @@ typedef struct {
 	color** grid; // Contents of the grid
 	place size;   // Total physical size
 	ant* ants;    // List of ants
-	size_t pop;   // Population count
+	int pop;      // Population count
+	int step;     // Current step
 } grid;
 
 // Create a new blank, empty grid
 grid* create_grid ();
 
 // Add a new ant to the grid with given coordinates and instruction set
-void add_ant (grid* g, place pos, dir d, char* moves);
+void add_ant (grid* g, place pos, dir d, const char* moves);
 
 // Step forwards and backwards.
 void do_step (grid* g);

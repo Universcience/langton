@@ -52,14 +52,17 @@ dir c2d (char c)
 			return 2;
 		case 'r': case 'R': case '3':
 			return 3;
+		default:
+			assert(false);
+			return 0;
 	}
 }
 
-void add_ant (grid* g, place pos, dir d, char* moves)
+void add_ant (grid* g, place pos, dir d, const char* moves)
 {
 	assert (g && moves && *moves);
 
-	ant a = { pos, d, calloc(a.max, sizeof(dir)), strlen(moves) };
+	ant a = { pos, d, calloc(strlen(moves), sizeof(dir)), strlen(moves) };
 	for (int i = 0 ; i < a.max ; ++i)
 		a.moves[i] = c2d(moves[i]);
 
@@ -112,35 +115,38 @@ void expand (grid* g)
 void do_step (grid* g)
 {
 	for (int i = 0 ; i < g->pop ; ++i) {
-		ant a = g->ants[i];
-		color* c = &g->grid[a.pos.x][a.pos.y];
+		ant* a = &g->ants[i];
+		color* c = &g->grid[a->pos.x][a->pos.y];
 
 		// Turn around, increment color, step forward.
-		a.d += a.moves[*c];
-		*c = ((*c)+1)%a.max;
-		switch (a.d) {
+		a->d = (a->d + a->moves[*c])%4;
+		*c = ((*c)+1)%a->max;
+		switch (a->d) {
 			case UP:
-				a.pos.y--;
+				a->pos.y--;
 				break;
 			case DOWN:
-				a.pos.y++;
+				a->pos.y++;
 				break;
 			case LEFT:
-				a.pos.x--;
+				a->pos.x--;
 				break;
 			case RIGHT:
-				a.pos.x++;
+				a->pos.x++;
 				break;
 		}
 
 		// Expand if OoB.
-		if ( a.pos.x < 0 || a.pos.x > (g->size.x-1)/2
-		  || a.pos.y < 0 || a.pos.y > (g->size.y-1)/2 )
+		if ( a->pos.x < 0 || a->pos.x >= g->size.x
+		  || a->pos.y < 0 || a->pos.y >= g->size.y )
 			expand(g);
 	}
+
+	g->step++;
 }
 
 void do_bstep (grid* g)
 {
+	(void) g;
 	//TODO
 }
