@@ -19,6 +19,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+#include <string.h>
+#include <fcntl.h>
+
 #include "langton.h"
 
 //FIXME: Decouple simulation and interface steps.
@@ -71,9 +74,9 @@ char d2c (dir d)
 		case LEFT:
 			return '<';
 		case DOWN:
-			return '>';
-		case RIGHT:
 			return 'v';
+		case RIGHT:
+			return '>';
 		default:
 			return '?';
 	}
@@ -160,7 +163,7 @@ int main (int argc, char* argv[])
 			place ap = g->ants[i].pos;
 			if (ap.x >= corner.x && ap.x < corner.x + COLS
 			 && ap.y >= corner.y && ap.y < corner.y + LINES-1)
-				mvaddch(ap.y-corner.y, ap.x-corner.x, d2c(g->ants[i].d));
+				mvaddch(ap.y-corner.y+1, ap.x-corner.x, d2c(g->ants[i].d));
 		}
 		attroff(A_BOLD);
 		move(0,0);
