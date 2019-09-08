@@ -147,6 +147,36 @@ void do_step (grid* g)
 
 void do_bstep (grid* g)
 {
-	(void) g;
-	//TODO
+	for (int i = 0 ; i < g->pop ; ++i) {
+		ant* a = &g->ants[i];
+		color* c;
+
+		// Step backwards, decrement color, reverse turn.
+		switch (a->d) {
+			case UP:
+				a->pos.y++;
+				break;
+			case DOWN:
+				a->pos.y--;
+				break;
+			case LEFT:
+				a->pos.x++;
+				break;
+			case RIGHT:
+				a->pos.x--;
+				break;
+		}
+
+		// Expand if OoB. (Happens when rewinding before the start...)
+		if ( a->pos.x < 0 || a->pos.x >= g->size.x
+		  || a->pos.y < 0 || a->pos.y >= g->size.y )
+			expand(g);
+
+		c = &g->grid[a->pos.x][a->pos.y];
+		// Modulo and bitwise shenanigans ensure no negative results.
+		*c = (((*c)-1)%a->max + a->max)%a->max;
+		a->d = (a->d - a->moves[*c]) & 0x3;
+	}
+
+	g->step--;
 }
