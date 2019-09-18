@@ -1,9 +1,9 @@
-CFLAGS=-Wall -Wextra -g
+CFLAGS+=-Wall -Wextra
 LDFLAGS=-lncurses
 
 BIN=langton
 
-langton: main.c langton.c
+langton: main.c langton.h langton.c
 
 .PHONY: all clean
 
