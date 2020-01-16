@@ -1,4 +1,4 @@
-# `turing`
+# `langton`
 
 Implémentation ASCII de la fourmi de Langton, développée dans le cadre de l'article **La fourmi de Langton** de la revue du Palais de la Découverte.
 
